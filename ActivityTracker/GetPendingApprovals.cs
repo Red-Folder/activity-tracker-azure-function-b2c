@@ -14,9 +14,15 @@ namespace ActivityTracker
         [FunctionName("GetPendingApprovals")]
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.User, "get", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
+            log.Info("Received request to GetPendingApprovals");
             var url = Environment.GetEnvironmentVariable("GetPendingApprovalsUrl", EnvironmentVariableTarget.Process);
 
-            return await _httpClient.GetAsync(url);
+            log.Info($"Making request to {url}");
+            var response = await _httpClient.GetAsync(url);
+
+            log.Info($"Received status code {response.StatusCode}");
+
+            return response;
         }
     }
 }
